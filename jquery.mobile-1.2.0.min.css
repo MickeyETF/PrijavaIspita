@@ -4013,13 +4013,12 @@ span.ui-slider-label-b {
 {
 border-collapse:collapse;
 background-color:#dae7be;
-width:auto;
 display:block;
 }
 #List td
 {
 border:solid #30F 2px;
-padding-left:20px;
+width:25%;
 height:35px;
 font-weight:bold;
 text-shadow:0px;
