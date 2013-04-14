@@ -13,28 +13,28 @@
         <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js">
         </script>
 		<script src="phonegap.js"></script>
-        <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js">
-        </script>
+        <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script src="md5.js"></script>
     </head>
    <body>
         <!-- Home -->
         <div data-role="page" id="page1">
             <div class="header" id="reg_header" data-theme="b" data-role="header">
                 <h3 id="reg">
-                    Registracija
+                   Logovanje
                 </h3>
             </div>
             <div data-role="content">
                 <h4>
                     U sledeća polja upišite podatke za logovanje na InfoKiosk. Ukoliko niste
-            registrovani odaberite link ispod.
+            registrovani odaberite dugme InfoKiosk.
                 </h4>
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup">
                         <label for="korisnicko_ime">
-                            Korisničko Ime
+                           Broj indeksa
                         </label>
-                        <input name="korisnicko_ime" id="korisnicko_ime" placeholder="Unesite ime.." value="" type="text" />
+                        <input name="korisnicko_ime" id="korisnicko_ime" placeholder="Unesite ime.." value="" type="number" />
                     </fieldset>
                 </div>
                 <div data-role="fieldcontain">
@@ -42,41 +42,104 @@
                         <label for="lozinka">
                             Lozinka
                         </label>
-                        <input name="lozinka" id="lozinka" placeholder="Unesite lozinku.." value="" type="text" />
+                        <input name="lozinka" id="lozinka" placeholder="Unesite lozinku.." value="" type="password" />
                     </fieldset>
                 </div>
-                <a class="button" id="unos" data-role="button" data-theme="b" href="#" onclick="UnosPodataka()">
-                    Unesi
-                </a>
+				<a data-role="button" data-theme="b" data-rel="dialog" href="#dialog" data-transition="pop" onclick="Enkripcija();">Unos</a>
                 <div>
-                    <a class="link" id="infokiosk" href="https://infokiosk.unssa.rs.ba/" data-transition="fade">
+                    <a class="link" id="infokiosk" data-role="button" data-theme="b" href="https://infokiosk.unssa.rs.ba/" data-transition="fade">
                         InfoKiosk
                     </a>
                 </div>
+           </div>
+        </div>
+		
+		
+		
+		<!-- dialog -->
+		<div data-role="page" id="dialog">
+            <div data-theme="b" data-role="header">
+                <h3>
+                    Dialog
+                </h3>
+            </div>
+            <div data-role="content">
+			<img id="loading-image" src="images/ajax-loader.gif"/>
+				<div id="poruka"></div>
+				<a id="ok" data-role="button" data-theme="b"  onclick="UnosPodataka()">OK</a>
+				<a id="nazad" data-role="button" data-theme="b"  onclick="javascript:window.location.replace('index.html');">Nazad</a>
             </div>
         </div>
-		<script>
-    function UnosPodataka()
-    { 
-    var korisnicko_ime=document.getElementById("korisnicko_ime").value;
-    var lozinka=document.getElementById("lozinka").value;
-    if(korisnicko_ime!=""&& lozinka!="")
-    {
-    window.localStorage.setItem("korisnicko_ime", korisnicko_ime);
-    window.localStorage.setItem("lozinka", lozinka);
-    window.location.replace("pocetna.html");
-    }
-    }
-    window.onload=function()
+		
+		
+	<script>
+	window.onload=function()
     {
     	 var korisnicko_ime = window.localStorage.getItem("korisnicko_ime");
     	 var lozinka = window.localStorage.getItem("lozinka");
-    	if(korisnicko_ime!=null || lozinka!=null)
+    	if(korisnicko_ime!=null && lozinka!=null)
     	{	
     	window.location.replace('pocetna.html');
     	}
     	
     }
+	
+	function Enkripcija()
+	{
+		korisnicko_ime=document.getElementById("korisnicko_ime").value;
+		lozinka=document.getElementById("lozinka").value;
+		var md5_lozinka=hex_md5(lozinka);
+		loadingAjax(korisnicko_ime,md5_lozinka);
+	}
+	function loadingAjax(user,pass) // funkcija za provjeru uspjesnosti logovanaja ukoliko je sistem u online rezimu
+			
+			{
+			adresa="http://wstest.etf.unssa.rs.ba/studenti/status/etf/"+user+"/"+pass;
+					$.ajax({
+					  //url:"http://wstest.etf.unssa.rs.ba/studenti/status/etf/931/ed448b3761b35affa0409afa2aaf09d8",
+					  url:adresa,
+					  type:"GET",
+					  timeout:3000,
+					  crossDomain: true,
+					  dataType:"jsonp",
+					  beforeSend: function() {
+					  $("#loading-image").show();
+					   },
+					  success: function(data)
+					{
+						$("#loading-image").hide();
+						$("#ok").css({display: "block"});
+						$.each(data, function(index, item)
+						{
+						$('#poruka').html("Uspjesno ste logovani. Vase ime i prezime je:"+ item.Student.ime+" "+item.Student.prezime);
+						});
+						
+					},
+					error: function (request,error) 
+					{
+					
+					$("#loading-image").hide();
+					$("#nazad").css({display: "block"});
+						if(error=="timeout")
+						{
+							$('#poruka').html("Greska u komunikaciji sa serverom provjerite internet konekciju");
+						}
+						else
+						{
+							$('#poruka').html("Podaci nisu validni");
+						}
+					}
+					});
+				
+			}
+	function UnosPodataka() // funkcija za cuvanje imena i lozinke
+    { 	
+		window.localStorage.setItem("korisnicko_ime", korisnicko_ime);
+		window.localStorage.setItem("lozinka", md5_lozinka);
+		window.location.replace('pocetna.html');
+    }
+   
+	
 	</script>
     </body>
 </html>

@@ -18,9 +18,7 @@
     </head>
     <body onload="loadingAjax();">
         <!-- Home -->
-		
         <div data-role="page" >
-		
 		<div data-theme="b" data-role="header">
                 <a data-role="button" href="javascript:window.location.replace('pocetna.html');" data-icon="back" data-iconpos="left" class="ui-btn-left">
                     Nazad
@@ -32,7 +30,7 @@
             <div data-role="content" id="polozeni_ispiti">
 			<img id="loading-image" src="images/ajax-loader.gif"/>
 			<table id="List">
-				<thead><tr><td>RB</td><td>Naziv predmeta</td><td>Datum polaganja</td><td>Ocjena</td></tr></thead>				
+				<thead><tr><td>RB</td><td>Naziv predmeta</td><td>Godina</td><td>Semestar</td></tr></thead>				
 				</table>
 			</div>
         </div>
@@ -41,9 +39,9 @@
 			{
 				var korisnicko_ime = window.localStorage.getItem("korisnicko_ime");
 				var lozinka = window.localStorage.getItem("lozinka");
-				var adresa="http://wstest.etf.unssa.rs.ba/studenti/polozeni_ispiti/etf/"+korisnicko_ime+"/"+lozinka;
+				var adresa="http://wstest.etf.unssa.rs.ba/studenti/nepolozeni_ispiti/etf/"+korisnicko_ime+"/"+lozinka;
 				$.ajax({
-				  //url:"http://wstest.etf.unssa.rs.ba/studenti/polozeni_ispiti/etf/931/ed448b3761b35affa0409afa2aaf09d8",
+				  //url:"http://wstest.etf.unssa.rs.ba/studenti/nepolozeni_ispiti/etf/931/ed448b3761b35affa0409afa2aaf09d8",
 				  url:adresa,
 				  type:"GET",
 				  crossDomain: true,
@@ -62,7 +60,7 @@
 					$.each(data, function(index, item)
 					{
 						 //console.log(item.Ispit.id);
-						 $('#List').append('<tr><td>'+i+'</td><td>'+item.Ispit.naziv+'</td><td>'+item.Ispit.datum+'</td><td>'+item.Ispit.ocjena+'</td></tr>');
+						 $('#List').append('<tr><td>'+i+'</td><td>'+item.Ispit.naziv+'</td><td>'+item.Ispit.godina+'</td><td>'+item.Ispit.semestar+'</td></tr>');
 						 i++;
 					});
 				  }
