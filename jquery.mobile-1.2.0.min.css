@@ -1320,9 +1320,9 @@ body.ui-mobile-viewport,div.ui-mobile-viewport {
 	border-width: 0;
 	overflow: visible;
 	overflow-x: hidden;
-	padding: 15px;
-	height: auto%;
-	width: auto%;
+	/*padding: 15px;*/
+	height: 100%;
+	width: 100%;
 }
 
 .ui-icon {
