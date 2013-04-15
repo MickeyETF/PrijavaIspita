@@ -4022,6 +4022,7 @@ table {
 	margin-left:-10px;
     width: 100%;
     -webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
 }	
 table tr td {
     font-size:12px;
@@ -4038,11 +4039,12 @@ table thead td {
 	color:#000;
 	font-weight:bold;
     background-image: -webkit-linear-gradient(top, #00d5f2, #626262);
-	 background-image: -moz-linear-gradient(top, #00d5f2, #626262);
+	background-image: -moz-linear-gradient(top, #00d5f2, #626262);
 }
 table tr:hover td 
 {
 	background-image: -webkit-linear-gradient(top, #f3f3f3, #aaa);
+	background-image: -moz-linear-gradient(top, #f3f3f3, #aaa);
 }
    
 table tr td:last-child {
@@ -4054,9 +4056,8 @@ table tr:last-child td {
 }
 #loading-image
 {
-	margin:35%;
-	width:30%;
-	height:30%;
+	margin-left:45%;
+	margin-top:5%;
 }
 
 button {
@@ -4113,6 +4114,11 @@ button {
 #ok
 {
 	display:none;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 

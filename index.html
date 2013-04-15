@@ -6,8 +6,7 @@
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <title>
-        </title>
+        <title>PrijavaIspita</title>
         <link rel="stylesheet" href="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
          <link rel="stylesheet" href="jquery.mobile-1.2.0.min.css" />
         <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js">
@@ -77,6 +76,7 @@
     {
     	 var korisnicko_ime = window.localStorage.getItem("korisnicko_ime");
     	 var lozinka = window.localStorage.getItem("lozinka");
+		 var md5_lozinka="";
     	if(korisnicko_ime!=null && lozinka!=null)
     	{	
     	window.location.replace('pocetna.html');
@@ -88,7 +88,7 @@
 	{
 		korisnicko_ime=document.getElementById("korisnicko_ime").value;
 		lozinka=document.getElementById("lozinka").value;
-		var md5_lozinka=hex_md5(lozinka);
+		md5_lozinka=hex_md5(lozinka);
 		loadingAjax(korisnicko_ime,md5_lozinka);
 	}
 	function loadingAjax(user,pass) // funkcija za provjeru uspjesnosti logovanaja ukoliko je sistem u online rezimu
@@ -108,11 +108,19 @@
 					  success: function(data)
 					{
 						$("#loading-image").hide();
+						if(data!="")
+						{
 						$("#ok").css({display: "block"});
 						$.each(data, function(index, item)
 						{
 						$('#poruka').html("Uspjesno ste logovani. Vase ime i prezime je:"+ item.Student.ime+" "+item.Student.prezime);
 						});
+						}
+						else
+						{
+						$('#poruka').html("Podaci nisu validni");
+						$("#nazad").css({display: "block"});
+						}
 						
 					},
 					error: function (request,error) 
@@ -126,7 +134,7 @@
 						}
 						else
 						{
-							$('#poruka').html("Podaci nisu validni");
+							$('#poruka').html("Doslo je do greske");
 						}
 					}
 					});
