@@ -5,16 +5,11 @@
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <title>
-        </title>
-        <link rel="stylesheet" href="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-         <link rel="stylesheet" href="jquery.mobile-1.2.0.min.css" />
-        <script src="https://s3.amazonaws.com/codiqa-cdn/jquery-1.7.2.min.js">
-        </script>
+        <title></title>
+        <link rel="stylesheet" href="jquery.mobile-1.2.0.min.css" />
+        <script src="jquery-1.7.2.min.js"></script>
 		<script src="phonegap.js"></script>
-        <script src="https://s3.amazonaws.com/codiqa-cdn/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-		
-        
+        <script src="jquery.mobile-1.2.0.min.js"></script>
     </head>
     <body onload="loadingAjax();">
         <!-- Home -->
@@ -61,17 +56,21 @@
 					var i=1;
 					$.each(data, function(index, item)
 					{
-						 console.log(item.Ispit.id);
-						 $('#List').append('<tr><td>'+i+'</td><td>'+item.Ispit.naziv+'</td><td><button onclick="Prijava();">Prijava</button></td></tr>');
+						 //console.log(item.Ispit.id);
+						 var id_ispita=item.Ispit.id;
+						 $('#List').append('<tr><td>'+i+'</td><td>'+item.Ispit.naziv+'</td><td><button id="'+id_ispita+'" onclick="Prijava(this.id,this.value)" value="prijava" >prijava</button></td></tr>');
 						 i++;
 					});
 				  }
 				});
 			}
-			function Prijava()
+			function Prijava(a,b)
 			{
-			alert("Prijavljuje se");
-			
+			var korisnicko_ime = window.localStorage.getItem("korisnicko_ime");
+			var lozinka = window.localStorage.getItem("lozinka");
+			var poruka="etf#" + korisnicko_ime + "#" + lozinka + "#" + b + "#" + a;	
+			var contactno="066683969";
+			window.location.href = "sms:"+contactno+"?body="+poruka;			
 			}
 </script>
     </body>
