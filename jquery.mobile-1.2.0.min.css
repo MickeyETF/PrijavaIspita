@@ -4056,8 +4056,9 @@ table tr:last-child td {
 }
 #loading-image
 {
-	margin-left:45%;
-	margin-top:5%;
+	margin:35%;
+	width:30%;
+	height:30%;
 }
 
 button {
